@@ -1,4 +1,4 @@
-package com.example.og.ogsn;
+package com.example.og.ogsn.activities.home;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -8,22 +8,18 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 
-import com.example.og.ogsn.classes.Post;
-import com.example.og.ogsn.utils.socketSingleton;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.example.og.ogsn.activities.drawer.ChatFragment;
+import com.example.og.ogsn.R;
+import com.example.og.ogsn.activities.drawer.OnlineFriendsFragment;
+import com.example.og.ogsn.utils.SocketSingleton;
+import com.example.og.ogsn.utils.Vars;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private socketSingleton mSocket;
+    private SocketSingleton mSocket;
 
 
     android.app.FragmentManager manager;
@@ -48,9 +44,9 @@ public class HomeActivity extends AppCompatActivity
         HomeFragment homeFragment = new HomeFragment();
         changeFragment(homeFragment);
 
-        mSocket = socketSingleton.getInstance("http://192.168.1.6:3000/");
-        socketSingleton.connect();
-       // socketSingleton.sendMessage("5465465","hello mr");
+        mSocket = SocketSingleton.getInstance(Vars.url);
+        //SocketSingleton.connect();
+       // SocketSingleton.sendMessage("5465465","hello mr");
 
 
     }
@@ -78,12 +74,9 @@ public class HomeActivity extends AppCompatActivity
             changeFragment(homeFragment);
 
         } else if (id == R.id.nav_chat) {
-            ChatFragment chatFragment = new ChatFragment();
-            changeFragment(chatFragment);
+            OnlineFriendsFragment friendsFragment= new OnlineFriendsFragment();
+            changeFragment(friendsFragment);
 
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
 
         }
 

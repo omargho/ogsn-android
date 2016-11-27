@@ -1,29 +1,23 @@
-package com.example.og.ogsn;
+package com.example.og.ogsn.activities.home;
 
 /**
  * Created by og on 11/8/16.
  */
 
 import android.content.Context;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
+import com.example.og.ogsn.R;
 import com.example.og.ogsn.classes.Post;
 
 import java.util.List;
 
-/**
- * Created by Ravi Tamada on 18/05/16.
- */
+
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.MyViewHolder> {
 
     private Context mContext;

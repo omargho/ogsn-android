@@ -13,6 +13,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.dd.processbutton.iml.ActionProcessButton;
+import com.example.og.ogsn.activities.home.HomeActivity;
 import com.example.og.ogsn.utils.Vars;
 import com.example.og.ogsn.utils.VolleySingleton;
 
@@ -43,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
                 editPassword.setEnabled(false);
                 btnSignIn.setProgress(1);
 
-                String url = "http://192.168.1.6:3000/user/login";
+                String url = Vars.url+"user/login";
                 try {
                     JSONObject jsonBody = new JSONObject();
                     jsonBody.put("username", editEmail.getText().toString());

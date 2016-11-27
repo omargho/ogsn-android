@@ -1,4 +1,4 @@
-package com.example.og.ogsn;
+package com.example.og.ogsn.activities.home;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.og.ogsn.R;
 import com.example.og.ogsn.classes.Post;
 
 import java.util.ArrayList;
