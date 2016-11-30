@@ -11,10 +11,10 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.og.ogsn.R;
 import com.example.og.ogsn.classes.Friend;
+import com.example.og.ogsn.utils.SocketSingleton;
 
 import java.util.ArrayList;
 
@@ -33,11 +33,10 @@ public class OnlineFriendsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_online_friends, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_connected_friends);
-
         friends = new ArrayList<>();
-        friends.add(new Friend("o", "o", "picture", "58381ff754f0421d98be612b"));
-        friends.add(new Friend("user 2", "user 2", "picture", "58381ff854f0421d98be612c"));
+
         adapter = new OnlineFriendsAdapter(getActivity(), friends);
+        SocketSingleton.getFriends(friends, adapter, getActivity());
         mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
 
@@ -48,8 +47,8 @@ public class OnlineFriendsFragment extends Fragment {
             @Override
             public void onClick(View view, int position) {
                 Friend friend = friends.get(position);
-                ChatFragment chatFragment= new ChatFragment();
-                Bundle bundle=new Bundle();
+                ChatFragment chatFragment = new ChatFragment();
+                Bundle bundle = new Bundle();
                 bundle.putString("id", friend.getId());
                 chatFragment.setArguments(bundle);
                 getActivity().getFragmentManager().beginTransaction()

@@ -41,7 +41,7 @@ public class ChatFragment extends Fragment {
         messageEditText = (EditText) view.findViewById(R.id.sendEditText);
         recyclerView = (RecyclerView) view.findViewById(R.id.chat_recycler_view);
         friendId = getArguments().getString("id");
-        if(messages==null)
+        if (messages == null)
             messages = new ArrayList<>();
 
         adapter = new ChatAdapter(getActivity(), messages);
@@ -55,11 +55,13 @@ public class ChatFragment extends Fragment {
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                messages.add(new Message(Vars.id, messageEditText.getText().toString(), "me"));
-                adapter.notifyItemInserted(messages.size());
-                recyclerView.scrollToPosition(messages.size() - 1);
-                SocketSingleton.sendMessage(friendId, messageEditText.getText().toString());
-                messageEditText.setText("");
+                if (!messageEditText.getText().toString().equals("")) {
+                    messages.add(new Message(Vars.id, messageEditText.getText().toString(), "me"));
+                    adapter.notifyItemInserted(messages.size());
+                    recyclerView.scrollToPosition(messages.size() - 1);
+                    SocketSingleton.sendMessage(friendId, messageEditText.getText().toString());
+                    messageEditText.setText("");
+                }
             }
         });
         SocketSingleton.receiveMessage(friendId, messages, adapter, recyclerView, getActivity());

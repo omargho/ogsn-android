@@ -3,13 +3,14 @@ package com.example.og.ogsn.utils;
 import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import com.example.og.ogsn.activities.drawer.ChatAdapter;
+import com.example.og.ogsn.activities.drawer.OnlineFriendsAdapter;
+import com.example.og.ogsn.classes.Friend;
 import com.example.og.ogsn.classes.Message;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URISyntaxException;
@@ -26,7 +27,6 @@ import io.socket.emitter.Emitter;
 public class SocketSingleton {
     private static SocketSingleton mSingletonSocket;
     private static Socket mSocket;
-    private static String tokenn;
 
     private SocketSingleton(String url) {
         try {
@@ -63,47 +63,81 @@ public class SocketSingleton {
 
 
     }
-/*
-    public static void receiveMessage(final TextView textView, final Activity activity) {
-        mSocket.on("receivedMessage", new Emitter.Listener() {
+
+    /*
+        public static void receiveMessage(final TextView textView, final Activity activity) {
+            mSocket.on("receivedMessage", new Emitter.Listener() {
+
+                @Override
+                public void call(final Object... args) {
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // This code will always run on the UI thread, therefore is safe to modify UI elements.
+                            textView.setText(args[0].toString());
+
+
+
+
+                        }
+                    });
+
+                }
+
+            });
+        }
+    */
+    public static void sendMessage(String to, String msg) {
+        mSocket.emit("privateMessage", Vars.id + "," + to + "," + msg);
+
+    }
+
+    public static void getFriends(final ArrayList<Friend> friends, final OnlineFriendsAdapter adapter, final Activity activity) {
+        mSocket.emit("onlineFriends");
+        mSocket.on("receivedFriends", new Emitter.Listener() {
 
             @Override
             public void call(final Object... args) {
+                Log.e("receive", "received friends");
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        // This code will always run on the UI thread, therefore is safe to modify UI elements.
-                        textView.setText(args[0].toString());
+                        JSONArray x = (JSONArray) args[0];
+                        try {
+                            for (int i = 0; i < x.length(); i++) {
+                                JSONObject friend = (JSONObject) x.get(i);
+                                Log.e("receive", "1");
+                                friends.add(new Friend(friend.getString("firstname") + " " + friend.getString("lastname"), friend.getString("username"), friend.getString("picture"), friend.getString("_id")));
+                                adapter.notifyItemInserted(friends.size());
+                                Log.e("receive", "2");
+                            }
 
-
-
-
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
 
             }
-
         });
-    }
-*/
-    public static void sendMessage(String to, String msg) {
-        mSocket.emit("privateMessage", Vars.id +","+ to +","+ msg);
 
     }
 
+    ;
 
-    public static void receiveMessage(final String friendId,final ArrayList messages, final ChatAdapter adapter, final RecyclerView recyclerView, final Activity activity) {
+
+    public static void receiveMessage(final String friendId, final ArrayList messages, final ChatAdapter adapter, final RecyclerView recyclerView, final Activity activity) {
         mSocket.on("receivedMessage", new Emitter.Listener() {
 
             @Override
             public void call(final Object... args) {
-                Log.e("receive","received msg");
+                Log.e("receive", "received msg");
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         messages.add(new Message(friendId, args[0].toString(), "friend"));
                         adapter.notifyItemInserted(messages.size());
-                        recyclerView.scrollToPosition(messages.size()-1);
+                        recyclerView.scrollToPosition(messages.size() - 1);
 
                     }
                 });
